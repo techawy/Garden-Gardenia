@@ -408,7 +408,32 @@ class TranslationSystem:
             "plant_doctor": "Plant Doctor",
             "ai_assistant": "AI Assistant",
             "journal": "Garden Journal",
-            "watering": "Watering Schedule"
+            "watering": "Watering Schedule",
+            "in square meters": "in square meters",
+            "(comma separated)": "(comma separated)",
+            "No journal entries yet. Add your first entry above!": "No journal entries yet. Add your first entry above!",
+            "No plants need watering today!": "No plants need watering today!",
+            "Garden Assistant": "Garden Assistant",
+            "Upcoming Waterings": "Upcoming Waterings",
+            "days overdue": "days overdue",
+            "Write your garden observations here...": "Write your garden observations here...",
+            "Upload": "Upload",
+            "Weather:": "Weather:",
+            "It's hot! Consider:": "It's hot! Consider:",
+            "Watering plants early morning or late evening": "Watering plants early morning or late evening",
+            "Providing shade for sensitive plants": "Providing shade for sensitive plants",
+            "Mulching to retain soil moisture": "Mulching to retain soil moisture",
+            "It's cold! Consider:": "It's cold! Consider:",
+            "Protecting sensitive plants with covers": "Protecting sensitive plants with covers",
+            "Moving potted plants indoors": "Moving potted plants indoors",
+            "Delaying planting of warm-weather crops": "Delaying planting of warm-weather crops",
+            "High humidity! Watch for:": "High humidity! Watch for:",
+            "Fungal diseases (increase air circulation)": "Fungal diseases (increase air circulation)",
+            "Mold growth (avoid overwatering)": "Mold growth (avoid overwatering)",
+            "Windy conditions! Consider:": "Windy conditions! Consider:",
+            "Staking tall plants": "Staking tall plants",
+            "Protecting young seedlings": "Protecting young seedlings",
+            "Securing garden structures": "Securing garden structures"
         }
     
     def _load_arabic_translations(self) -> Dict[str, Any]: 
@@ -714,7 +739,32 @@ class TranslationSystem:
             "plant_doctor": "طبيب النباتات",
             "ai_assistant": "المساعد الذكي",
             "journal": "يوميات الحديقة",
-            "watering": "جدول الري"
+            "watering": "جدول الري",
+            "in square meters": "بالمتر المربع",
+            "(comma separated)": "(مفصولة بفواصل)",
+            "No journal entries yet. Add your first entry above!": "لا توجد مدونات يومية حتى الآن. أضف مدونتك الأولى أعلاه!",
+            "No plants need watering today!": "لا توجد نباتات تحتاج للري اليوم!",
+            "Garden Assistant": "مساعد الحديقة",
+            "Upcoming Waterings": "الري القادم",
+            "days overdue": "أيام متأخرة",
+            "Write your garden observations here...": "اكتب ملاحظات حديقتك هنا...",
+            "Upload": "رفع",
+            "Weather:": "الطقس:",
+            "It's hot! Consider:": "الطقس حار! ضع في اعتبارك:",
+            "Watering plants early morning or late evening": "ري النباتات في الصباح الباكر أو في وقت متأخر من المساء",
+            "Providing shade for sensitive plants": "توفير الظل للنباتات الحساسة",
+            "Mulching to retain soil moisture": "التغطية للاحتفاظ برطوبة التربة",
+            "It's cold! Consider:": "الطقس بارد! ضع في اعتبارك:",
+            "Protecting sensitive plants with covers": "حماية النباتات الحساسة بالأغطية",
+            "Moving potted plants indoors": "نقل النباتات المزروعة في أصص إلى الداخل",
+            "Delaying planting of warm-weather crops": "تأخير زراعة محاصيل الطقس الدافئ",
+            "High humidity! Watch for:": "الرطوبة العالية! راقب:",
+            "Fungal diseases (increase air circulation)": "أمراض فطرية (زيادة دوران الهواء)",
+            "Mold growth (avoid overwatering)": "نمو العفن (تجنب الإفراط في الري)",
+            "Windy conditions! Consider:": "ظروف رياح! ضع في اعتبارك:",
+            "Staking tall plants": "تثبيت النباتات الطويلة",
+            "Protecting young seedlings": "حماية الشتلات الصغيرة",
+            "Securing garden structures": "تأمين هياكل الحديقة"
         }
     
     def get_text(self, key: str) -> str:
@@ -1455,7 +1505,7 @@ def show_garden_journal():
         )
         
         st.markdown(f"### 📷 {translator.get_text('take_photo')}")
-        camera_tab, upload_tab = st.tabs([translator.get_text("camera_mode"), "Upload"])
+        camera_tab, upload_tab = st.tabs([translator.get_text("camera_mode"), translator.get_text("Upload")])
         uploaded_photos = []
         
         with camera_tab:
@@ -1554,7 +1604,7 @@ def show_watering_scheduler():
                         st.experimental_rerun()
                 
                 if watering['days_overdue'] > 0:
-                    st.warning(f"{watering['days_overdue']} days overdue!")
+                    st.warning(f"{watering['days_overdue']} {translator.get_text('days overdue')}")
                 st.markdown("---")
 
 def display_weather_info(city: str) -> None:
@@ -1572,30 +1622,30 @@ def display_weather_info(city: str) -> None:
             st.metric(translator.get_text('observation_time'), current['observation_time'])
         
         if current.get('weather_descriptions'):
-            st.write(f"Weather: {current['weather_descriptions'][0]}")
+            st.write(f"{translator.get_text('Weather:')} {current['weather_descriptions'][0]}")
         
         with st.expander(translator.get_text("weather_recommendation")):
             if current['temperature'] > 30:
-                st.write("🌞 It's hot! Consider:")
-                st.write("- Watering plants early morning or late evening")
-                st.write("- Providing shade for sensitive plants")
-                st.write("- Mulching to retain soil moisture")
+                st.write(f"🌞 {translator.get_text('It\'s hot! Consider:')}")
+                st.write(f"- {translator.get_text('Watering plants early morning or late evening')}")
+                st.write(f"- {translator.get_text('Providing shade for sensitive plants')}")
+                st.write(f"- {translator.get_text('Mulching to retain soil moisture')}")
             elif current['temperature'] < 10:
-                st.write("❄️ It's cold! Consider:")
-                st.write("- Protecting sensitive plants with covers")
-                st.write("- Moving potted plants indoors")
-                st.write("- Delaying planting of warm-weather crops")
+                st.write(f"❄️ {translator.get_text('It\'s cold! Consider:')}")
+                st.write(f"- {translator.get_text('Protecting sensitive plants with covers')}")
+                st.write(f"- {translator.get_text('Moving potted plants indoors')}")
+                st.write(f"- {translator.get_text('Delaying planting of warm-weather crops')}")
             
             if current['humidity'] > 80:
-                st.write("💧 High humidity! Watch for:")
-                st.write("- Fungal diseases (increase air circulation)")
-                st.write("- Mold growth (avoid overwatering)")
+                st.write(f"💧 {translator.get_text('High humidity! Watch for:')}")
+                st.write(f"- {translator.get_text('Fungal diseases (increase air circulation)')}")
+                st.write(f"- {translator.get_text('Mold growth (avoid overwatering)')}")
             
             if current['wind_speed'] > 20:
-                st.write("💨 Windy conditions! Consider:")
-                st.write("- Staking tall plants")
-                st.write("- Protecting young seedlings")
-                st.write("- Securing garden structures")
+                st.write(f"💨 {translator.get_text('Windy conditions! Consider:')}")
+                st.write(f"- {translator.get_text('Staking tall plants')}")
+                st.write(f"- {translator.get_text('Protecting young seedlings')}")
+                st.write(f"- {translator.get_text('Securing garden structures')}")
 
 def show_system_info():
     st.markdown("### " + translator.get_text("system_info"))
@@ -1628,8 +1678,8 @@ def main():
         with st.expander("⚙️ " + translator.get_text("settings")):
             st.session_state.language = st.selectbox(
                 translator.get_text("Select Language:"), 
-                ['English', 'العربية'],
-                index=['English', 'العربية'].index(st.session_state.language)
+                ['English', 'Arabic'],
+                index=['English', 'Arabic'].index(st.session_state.language)
             )
             
             st.session_state.theme = st.selectbox(
