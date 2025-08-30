@@ -1678,10 +1678,9 @@ def main():
         with st.expander("⚙️ " + translator.get_text("settings")):
             st.session_state.language = st.selectbox(
                 translator.get_text("Select Language:"), 
-                ['English', 'Arabic'],
-                index=['English', 'Arabic'].index(st.session_state.language)
+                ['English', 'العربية'],
+                index=['English', 'العربية'].index(st.session_state.language)
             )
-            
             st.session_state.theme = st.selectbox(
                 translator.get_text("theme_select"),
                 list(theme_manager.themes.keys()),
